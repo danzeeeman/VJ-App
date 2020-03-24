@@ -1,0 +1,12 @@
+ofxAlembic
+ofxColorGradient
+ofxCubeMap
+ofxEasing
+ofxFft
+ofxGuiExtended
+ofxOsc
+ofxReactionDiffusion
+ofxReflectionRefraction
+ofxSphereCam
+ofxSyphon
+ofxTween2
