@@ -19,7 +19,7 @@ public:
     ofxOscReceiver      receiver;
     ofParameterGroup    abcGroup;
     ofParameter<float>  playbackPosition;
-    ofParameter<float>  shaderStage;
+    ofParameter<int>  shaderStage;
     ofParameter<bool>   bScrub;
     ofParameter<int>    abcIndex;
     vector<string>      abcPaths;

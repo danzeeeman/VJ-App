@@ -4,7 +4,7 @@
 #include "ofxGuiExtended.h"
 #include "AlembicRenderer.hpp"
 #include "oscWorkhorse.hpp"
-#include "ofxSyphon.h"
+#include "ofxNDI.h"
 class ofApp : public ofBaseApp{
     
 public:
@@ -38,7 +38,15 @@ public:
     //RENDER FBO
 
     //SYPHON
-    ofxSyphonServer syphon;
+    ofxNDIsender ndiSender;        // NDI sender
+    std::string senderName;        // Sender name
+    unsigned int senderWidth = 0;  // Width of the sender output
+    unsigned int senderHeight = 0;
+
+    bool bReadback = true;
+    bool bAsync = true;
+    double framerate = 60.0;
+
     ofCamera cam;
     
     ofxGui gui;

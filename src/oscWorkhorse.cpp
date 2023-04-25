@@ -41,5 +41,8 @@ void oscWorkhorse::update(){
         if(b.getAddress() == "/playback/camera"){
             cameraIndex.set(floor(ofMap(b.getArgAsFloat(0), 0.0, 1.0, cameraIndex.getMin(), cameraIndex.getMax(), true)));
         }
+        if (b.getAddress() == "/playback/color") {
+            baseColor.set(ofFloatColor(b.getArgAsFloat(0), b.getArgAsFloat(1), b.getArgAsFloat(2), b.getArgAsFloat(3)));
+        }
     }
 }

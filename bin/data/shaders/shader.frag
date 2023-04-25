@@ -38,10 +38,10 @@ void main() {
         
     } else if(stage < 2.) {
         float speed = 3.;
-        float scale = 30.0;
+        float scale = 30.0*abs(cos(elapsedTime))+5.0;
         float cutoff = .9;
         vec3 cur = mod(position  , scale) / scale;
-        cur *= 1. - abs(normal);
+        cur *= 1. - normal;
         gl_FragColor = (max(max(cur.x, cur.y), cur.z) < cutoff) ? off : vec4(1.0);
     } else if(stage < 3.) {
         gl_FragColor = vec4(sin(mod(position.x + elapsedTime*2., PI)),
@@ -50,11 +50,11 @@ void main() {
                             1);
     } else if(stage < 4.) {
         // crazy triangles, grid lines
-        float speed = 0.1;
-        float scale = 10.01;
+        float speed = 0.01;
+        float scale = 5.0;
         float cutoff = 0.9;
-        vec3 cur = mod(position + speed * elapsedTime, scale) / scale;
-        cur *= 1. - abs(normal);
+        vec3 cur = mod(position + abs(normal), scale) / scale;
+        cur *= 1.0 - abs(normal);
         gl_FragColor = (max(max(cur.x, cur.y), cur.z) < cutoff) ? off : vec4(sin(mod(position.x + elapsedTime*2., PI)),
                                                                              sin(mod(-randomOffset + elapsedTime*2., TWO_PI)),
                                                                              sin(mod(elapsedTime,PI)),

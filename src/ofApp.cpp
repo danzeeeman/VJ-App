@@ -2,14 +2,24 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  
+
+    ofBackground(0, 0, 0);
+    ofSetFrameRate(60);
+    ofSetVerticalSync(true);
     abcRenderer.setup(1280, 720);
     abcRenderer.setCamera(cam);
-    vector<ofColor> colorSpace;
-    colorSpace.push_back(ofColor::white);
-    colorSpace.push_back(ofColor::magenta);
-    colorSpace.push_back(ofColor::white);
-    abcRenderer.setBackgroundColors(colorSpace);
+
+    senderWidth = 1280;
+    senderHeight = 720;
+    senderName = "shapes";
+
+    ndiSender.SetAspectRatio(16, 9);
+    ndiSender.SetFrameRate(60);
+    ndiSender.SetReadback();
+    ndiSender.SetAsync();
+    ndiSender.CreateSender(senderName.c_str(), senderWidth, senderHeight);
+    ndiSender.SetFormat(NDIlib_FourCC_video_type_RGBA);
+
     osc.setup(1235);
     playbackTime = 0.0;
     setupGui();
@@ -32,6 +42,7 @@ void ofApp::loadAbcFiles(){
 
 void ofApp::setupGui(){
     panel = gui.addPanel(osc.abcGroup);
+    panel->setPosition(DOM::Position(ofGetWidth() - panel->getWidth()-10, 10));
 }
 //--------------------------------------------------------------
 void ofApp::update(){
@@ -46,7 +57,6 @@ void ofApp::update(){
               if(currentIndex >= abcPaths.size()){
                   currentIndex = 0;
               }
-        ofLog()<<"load"<<abcPaths[currentIndex]<<endl;
         osc.abcIndex.set(currentIndex);
         abcRenderer.load(abcPaths[currentIndex]);
         osc.cameraIndex.set(0);
@@ -73,7 +83,51 @@ void ofApp::update(){
 void ofApp::draw(){
     abcRenderer.draw();
     abcRenderer.mAbcFbo.draw(0, 0);
-    syphon.publishTexture(&abcRenderer.mAbcFbo.getTexture());
+
+    ndiSender.SendImage(abcRenderer.mAbcFbo.getTexture());
+
+    if (ndiSender.SenderCreated()) {
+
+        std::string str;
+        str = "Sending as : ["; str += senderName; str += "] (";
+        str += to_string(senderWidth); str += "x"; str += to_string(senderHeight); str += ")";
+        ofDrawBitmapString(str, 20, 25);
+        str = "fps : "; str += to_string((int)ofGetFrameRate());
+        ofDrawBitmapString(str, ofGetWidth() - 100, ofGetHeight()-10);
+
+        // Show sending options
+        ofDrawBitmapString("Sending options", 20, 48);
+
+        str = " NDI fps  (""F"") : ";
+        framerate = ndiSender.GetFrameRate();
+        str += std::to_string(framerate);
+        // Limit display to 2 decimal places
+        size_t s = str.rfind(".");
+        str = str.substr(0, s + 3);
+        ofDrawBitmapString(str, 20, 66);
+
+        str = " Async    (""A"") : ";
+        str += to_string((int)ndiSender.GetAsync());
+        ofDrawBitmapString(str, 20, 82);
+
+        str = " Readback (""P"") : ";
+        str += to_string((int)ndiSender.GetReadback());
+        ofDrawBitmapString(str, 20, 98);
+
+        str = " Format (""Y""""/""""R"") : ";
+        if (ndiSender.GetFormat() == NDIlib_FourCC_video_type_UYVY)
+            str += "YUV ";
+        else
+            str += "RGBA ";
+        ofDrawBitmapString(str, 20, 114);
+
+        str = " Size     (""S"") : ";
+        str += to_string((int)senderWidth);
+        str += "x";
+        str += to_string((int)senderHeight);
+        ofDrawBitmapString(str, 20, 130);
+
+    }
 
 }
 
