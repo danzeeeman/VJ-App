@@ -19,12 +19,14 @@ public:
     ofxOscReceiver      receiver;
     ofParameterGroup    abcGroup;
     ofParameter<float>  playbackPosition;
-    ofParameter<int>  shaderStage;
+    ofParameter<int>    shaderStage;
     ofParameter<bool>   bScrub;
     ofParameter<int>    abcIndex;
     vector<string>      abcPaths;
     ofParameter<bool>   bNext;
-    ofParameter<int>     cameraIndex;
+    ofParameter<int>    cameraIndex;
+    ofParameter<float>  shaderScale;
+    ofParameter<float>  shaderT;
     ofParameter<ofFloatColor> baseColor;
 };
 #endif /* oscWorkhorse_hpp */

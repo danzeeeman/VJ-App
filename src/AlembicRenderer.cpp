@@ -15,7 +15,7 @@ AlembicRenderer::~AlembicRenderer(){
 }
 
 void AlembicRenderer::setup(int width, int height){
-    mAbcFbo.allocate(width, height, GL_RGBA);
+    mAbcFbo.allocate(width, height, GL_RGBA16);
     viewport = ofRectangle(0, 0, width, height);
     mAbcFbo.begin();
     ofClear(0, 0, 0);
@@ -48,10 +48,6 @@ void AlembicRenderer::setStage(float stage){
     shader.end();
 }
 
-void AlembicRenderer::setCamera(ofCamera cam){
-    this->cam = cam;
-}
-
 void AlembicRenderer::setTime(float t){
     float time = ofMap(t, 0, 1, reader.getMinTime(), reader.getMaxTime(), true);
     reader.setTime(time);
@@ -65,15 +61,12 @@ void AlembicRenderer::update(){
 }
 
 void AlembicRenderer::draw(){
- 
-    
     mAbcFbo.begin();
     ofClear(0, 0, 0, 0);
     cam.begin(viewport);
     drawScene();
     cam.end();
     mAbcFbo.end();
-
 }
 
 void AlembicRenderer::drawScene(){
@@ -82,6 +75,18 @@ void AlembicRenderer::drawScene(){
     reader.draw();
     shader.end();
     ofDisableDepthTest();
+}
+
+void AlembicRenderer::setScale(float scale) {
+    shader.begin();
+    shader.setUniform1f("scale", scale);
+    shader.end();
+}
+
+void AlembicRenderer::setT(float t) {
+    shader.begin();
+    shader.setUniform1f("t", t);
+    shader.end();
 }
 
 void AlembicRenderer::setBaseColor(ofFloatColor color){

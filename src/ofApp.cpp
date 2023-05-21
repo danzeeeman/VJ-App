@@ -6,8 +6,10 @@ void ofApp::setup(){
     ofBackground(0, 0, 0);
     ofSetFrameRate(60);
     ofSetVerticalSync(true);
-    abcRenderer.setup(1280, 720);
-    abcRenderer.setCamera(cam);
+
+    senderWidth = 1280;
+    senderHeight = 720;
+    abcRenderer.setup(senderWidth, senderHeight);
 
     senderWidth = 1280;
     senderHeight = 720;
@@ -69,7 +71,7 @@ void ofApp::update(){
         abcRenderer.cameraIndex = osc.cameraIndex.get();
     }
     if(!osc.bScrub.get()){
-        playbackTime = playbackTime+(1.0/24.0);
+        playbackTime = playbackTime+ofGetLastFrameTime();
         playbackTime = fmodf(playbackTime, abcRenderer.reader.getMaxTime());
         osc.playbackPosition.set(ofMap(playbackTime, abcRenderer.reader.getMinTime(), abcRenderer.reader.getMaxTime(), 0, 1, true));
     }else{
@@ -77,12 +79,14 @@ void ofApp::update(){
     }
     abcRenderer.setTime(osc.playbackPosition.get());
     abcRenderer.setStage(osc.shaderStage);
+    abcRenderer.setScale(osc.shaderScale);
+    abcRenderer.setT(osc.shaderT);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     abcRenderer.draw();
-    abcRenderer.mAbcFbo.draw(0, 0);
+    abcRenderer.mAbcFbo.draw(0, 0, ofGetWidth(), ofGetHeight());
 
     ndiSender.SendImage(abcRenderer.mAbcFbo.getTexture());
 

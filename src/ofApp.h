@@ -33,11 +33,8 @@ public:
     AlembicRenderer abcRenderer;
     //OSC
     oscWorkhorse osc;
-    //RENDER VIEWPORT
-    ofRectangle mViewPort;
-    //RENDER FBO
 
-    //SYPHON
+    //NDI
     ofxNDIsender ndiSender;        // NDI sender
     std::string senderName;        // Sender name
     unsigned int senderWidth = 0;  // Width of the sender output

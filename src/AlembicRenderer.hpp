@@ -19,12 +19,13 @@ public:
     void load(string path);
     void loadShader(string path);
     void setBaseColor(ofFloatColor color);
-    void setCamera(ofCamera cam);
     void setTime(float t);
     void update();
     void drawScene();
     void draw();
     void setStage(float stage);
+    void setScale(float scale);
+    void setT(float t);
     ofShader shader;
     float reflectionCount;
     bool bLoop;
@@ -34,13 +35,9 @@ public:
     int cameraIndex;
     vector<string>      cameras;
     ofCamera cam;
-    ofCamera targetCam;
-    ofShader reflection;
     ofFbo mAbcFbo;
     ofRectangle viewport;
-    ofSpherePrimitive sphere;
     ofVec3f pos;
-    ofFbo gradientFBO;
 
 };
 #endif /* AlembicRenderer_hpp */
